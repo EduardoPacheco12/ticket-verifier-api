@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  nome        String
+  cpf         String   @unique
+  phoneNumber String
+  createdAt   DateTime @default(dbgenerated("now()"))
+  Ticket      Ticket[]
+}
+
+model Party {
+  id        Int      @id @default(autoincrement())
+  nome      String   @unique
+  partyDay  DateTime @db.Date
+  createdAt DateTime @default(dbgenerated("now()"))
+  Ticket    Ticket[]
+}
+
+model Ticket {
+  id            Int           @id @default(autoincrement())
+  user          User          @relation(fields: [userId], references: [id])
+  userId        Int
+  party         Party         @relation(fields: [partyId], references: [id])
+  partyId       Int
+  isUsed        Boolean       @default(false)
+  ticketType    TicketType
+  paymentMethod PaymentMethod
+  createdAt     DateTime      @default(dbgenerated("now()"))
+}
+
+enum TicketType {
+  Promocional
+  Comum
+  Cortesia
+}
+
+enum PaymentMethod {
+  Dinheiro
+  Pix
+  Cartao
+  Nenhum
+}
