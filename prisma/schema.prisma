@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id          Int      @id @default(autoincrement())
-  nome        String
+  name        String
   cpf         String   @unique
   phoneNumber String
   createdAt   DateTime @default(dbgenerated("now()"))
@@ -21,7 +21,7 @@ model User {
 
 model Party {
   id        Int      @id @default(autoincrement())
-  nome      String   @unique
+  name      String   @unique
   partyDay  DateTime @db.Date
   createdAt DateTime @default(dbgenerated("now()"))
   Ticket    Ticket[]
